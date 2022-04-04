@@ -29,15 +29,15 @@ class Client2 extends Thread {
             out.println("username " + username);
             out.flush();
 
-            Thread readMessage = new Thread(() -> {
-                try {
-                    System.out.println(in.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            });
-            readMessage.start();
+//            Thread readMessage = new Thread(() -> {
+//                try {
+//                    System.out.println(in.readLine());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            });
+//            readMessage.start();
 
             String line = null;
 
@@ -45,17 +45,15 @@ class Client2 extends Thread {
 
                 Scanner scanner = new Scanner(System.in);
                 line = scanner.nextLine();
+//                System.out.println(line);
 
                 out.println(username + " " + line);
                 out.flush();
 
-                try {
-                    System.out.println(in.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
+                System.out.println(in.readLine());
+
+            }
 
             sc.close();
         } catch (IOException e) {

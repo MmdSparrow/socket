@@ -63,14 +63,17 @@ class Server {
                     if (line.startsWith("username")) {
                         serverUserList.add(new ServerUser(line.split(" ")[1], clientSocket));
                         System.out.println("new user connected with username: " + line.split(" ")[1]);
+
                     } else if (line.split(" ")[1].equals("join")) {
                         for (ServerUser serverUser : serverUserList) {
                             if (serverUser.getUsername().equals(line.split(" ")[0])) {
                                 if(serverUser.getGroupsId().contains(line.split(" ")[2])){
                                     out.println("u already are joined to group!");
+                                    out.flush();
                                 }else {
-                                    out.println("done successfully.");
                                     serverUser.getGroupsId().add(line.split(" ")[2]);
+                                    out.println("done successfully.");
+                                    out.flush();
                                 }
                                 break;
                             }
@@ -93,6 +96,7 @@ class Server {
                             if(serverUser.getUsername().equals(newline[0])){
                                 if(serverUser.getGroupsId().contains(newline[2])){
                                     isNotInGroup=false;
+                                    break;
                                 }
                             }
                         }
@@ -110,7 +114,6 @@ class Server {
                             out.println("your message was send to group.");
                             out.flush();
                         }
-
                     } else if (line.split(" ")[1].equals("leave")) {
                         for (ServerUser serverUser : serverUserList) {
                             if (serverUser.getUsername().equals(line.split(" ")[0])) {
