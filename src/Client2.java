@@ -48,6 +48,12 @@ class Client2 extends Thread {
 
                 out.println(username + " " + line);
                 out.flush();
+
+                try {
+                    System.out.println(in.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
 

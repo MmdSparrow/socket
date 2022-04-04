@@ -66,37 +66,69 @@ class Server {
                     } else if (line.split(" ")[1].equals("join")) {
                         for (ServerUser serverUser : serverUserList) {
                             if (serverUser.getUsername().equals(line.split(" ")[0])) {
-                                serverUser.getGroupsId().add(line.split(" ")[2]);
+                                if(serverUser.getGroupsId().contains(line.split(" ")[2])){
+                                    out.println("u already are joined to group!");
+                                }else {
+                                    out.println("done successfully.");
+                                    serverUser.getGroupsId().add(line.split(" ")[2]);
+                                }
                                 break;
                             }
                         }
                         System.out.println("join!");
-                        for (ServerUser serverUser : serverUserList) {
-                            if (serverUser.getGroupsId().contains(line.split(" ")[2])) {
-                                out = new PrintWriter(serverUser.getSocket().getOutputStream(), true);
-                                out.println(line.split(" ")[0] + " join to group with id " + line.split(" ")[2] + " say welcome plz!");
-                                out.flush();
-                            }
-                        }
+//                        for (ServerUser serverUser : serverUserList) {
+//                            if (serverUser.getGroupsId().contains(line.split(" ")[2])) {
+////                                out = new PrintWriter(serverUser.getSocket().getOutputStream(), true);
+////                                out.println(line.split(" ")[0] + " join to group with id " + line.split(" ")[2] + " say welcome plz!");
+//                                System.out.println(line.split(" ")[0] + " join to group with id " + line.split(" ")[2] + " say welcome plz!");
+//                                out.println("you are jointed to group.");
+//                                out.flush();
+//                            }
+//                        }
 
                     } else if (line.split(" ")[1].equals("send")) {
                         String[] newline = line.split(" ");
-                        newline[0] = "";
-                        newline[1] = "";
-                        newline[2] = "";
-                        String message = String.join(" ", newline);
-                        System.out.println("user with username " + line.split(" ")[0] + ", send message to group with id " + line.split(" ")[2] + ": " + message);
-                        out.println(line.split(" ")[2] + " user with username " + line.split(" ")[0] + ", send message to group with id " + line.split(" ")[2] + ": " + message);
+                        boolean isNotInGroup = true;
+                        for(ServerUser serverUser: serverUserList){
+                            if(serverUser.getUsername().equals(newline[0])){
+                                if(serverUser.getGroupsId().contains(newline[2])){
+                                    isNotInGroup=false;
+                                }
+                            }
+                        }
+                        if(isNotInGroup){
+                            out.println("at first u need to join to this group!");
+                            out.flush();
+                        }
+                        else {
+                            newline[0] = "";
+                            newline[1] = "";
+                            newline[2] = "";
+                            String message = String.join(" ", newline);
+                            System.out.println("user with username " + line.split(" ")[0] + ", send message to group with id " + line.split(" ")[2] + ": " + message);
+//                            out.println(line.split(" ")[2] + " user with username " + line.split(" ")[0] + ", send message to group with id " + line.split(" ")[2] + ": " + message);
+                            out.println("your message was send to group.");
+                            out.flush();
+                        }
+
                     } else if (line.split(" ")[1].equals("leave")) {
                         for (ServerUser serverUser : serverUserList) {
                             if (serverUser.getUsername().equals(line.split(" ")[0])) {
-                                serverUser.getGroupsId().remove(line.split(" ")[1]);
+                                if(serverUser.getGroupsId().contains(line.split(" ")[2])){
+                                    serverUser.getGroupsId().remove(line.split(" ")[2]);
+                                    System.out.println("user with username "+ line.split(" ")[0]+ " leave from group with id "+line.split(" ")[2]);
+                                    out.println("done successfully.");
+                                    out.flush();
+                                }else {
+                                    out.println("u are not in this group that u wanna left!");
+                                    out.flush();
+                                }
                                 break;
                             }
                         }
-                        System.out.println("leave!");
-                        out.println(line.split(" ")[0] + " leave group " + line.split(" ")[1] + " say bay plz!");
-                        out.flush();
+//                        System.out.println("leave!");
+//                        out.println(line.split(" ")[0] + " leave group " + line.split(" ")[1] + " say bay plz!");
+//                        out.flush();
                     }
                 }
             } catch (IOException e) {
