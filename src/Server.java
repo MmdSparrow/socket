@@ -10,6 +10,7 @@ import java.util.List;
 class Server {
     private static List<ServerUser> serverUserList = new ArrayList<>();
 
+
     public static void main(String[] args) {
         ServerSocket server = null;
 
